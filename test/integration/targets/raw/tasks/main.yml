@@ -81,3 +81,34 @@
           - 'raw_result2.stdout_lines is defined'
           - 'raw_result2.rc == 0'
           - 'raw_result2.stdout_lines == ["foobar"]'
+
+- name: pass stdin to cat via command
+  raw: "cat"
+  args:
+    stdin: 'foobar'
+  register: command_result3
+
+- name: assert that stdin is passed
+  assert:
+    that:
+      - 'command_result3.stdout_lines == ["foobar"]'
+
+- name: locate sha1sum/shasum
+  shell: which sha1sum || which shasum
+  register: sha1sum
+
+- name: send to stdin literal multiline block
+  raw: "{{ sha1sum.stdout }}"
+  args:
+    stdin: |-
+      this is the first line
+      this is the second line
+
+      this line is after an empty line
+      this line is the last line
+  register: command_result4
+
+- name: assert the multiline input was passed correctly
+  assert:
+    that:
+      'command_result4.stdout_lines == ["9cd0697c6a9ff6689f0afb9136fa62e0b3fee903  -"]'

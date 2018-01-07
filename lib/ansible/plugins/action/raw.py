@@ -38,7 +38,10 @@ class ActionModule(ActionBase):
             return result
 
         executable = self._task.args.get('executable', False)
-        result.update(self._low_level_execute_command(self._task.args.get('_raw_params'), executable=executable))
+        in_data =  self._task.args.get('stdin', None)
+        if in_data:
+            in_data += '\n'
+        result.update(self._low_level_execute_command(self._task.args.get('_raw_params'), executable=executable, in_data=in_data))
 
         result['changed'] = True
 

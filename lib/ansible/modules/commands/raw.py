@@ -28,6 +28,12 @@ options:
         as privilege escalation requires a shell.
     required: false
     version_added: "1.0"
+  stdin:
+    version_added: "2.4"
+    description:
+      - Set the stdin of the command directly to the specified value.
+    required: false
+    default: null
 description:
      - Executes a low-down and dirty SSH command, not going through the module
        subsystem. This is useful and should only be done in two cases. The
